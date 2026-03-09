@@ -55,7 +55,6 @@
   "user_access_interfaces": {
     "Provider API": {
       "access_method": "http",
-      "api_key": "${ secrets.INCEPTION_API_KEY }",
       "base_url": "${GATEWAY_BASE_URL}/p/inception",
       "routing_key": {
         "model": "mercury-edit"
