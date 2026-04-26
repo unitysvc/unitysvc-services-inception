@@ -5,10 +5,10 @@
   "currency": "USD",
   "description": "Mercury 2 language model",
   "details": {
+    "context_length": 128000,
     "metadata_sources": {
       "context_length": "openrouter"
     },
-    "context_length": 128000,
     "parameter_count": null
   },
   "display_name": "Mercury 2",
