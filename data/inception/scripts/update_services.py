@@ -63,8 +63,23 @@ class ModelSource:
                 yield template_vars
                 print("  OK")
 
-    def _build_template_vars(self, model_id: str, model_info: dict) -> dict:
+    # Inception's "edit" models target a custom /v1/edit/completions
+    # endpoint with a structured prompt format (see
+    # https://docs.inceptionlabs.ai/capabilities/next-edit.md), not the
+    # standard /chat/completions surface.  The platform gateway, the
+    # ``llm`` service_type, and the ``llm_*`` presets all assume
+    # /chat/completions, so advertising these as standard LLM offerings
+    # makes connectivity probes and code examples fail with upstream 500.
+    # Re-enable when /edit/completions routing + an "edit" service_type
+    # / preset land — tracked at https://github.com/unitysvc/unitysvc.
+    EDIT_MODEL_IDS = frozenset({"mercury-edit", "mercury-edit-2"})
+
+    def _build_template_vars(self, model_id: str, model_info: dict) -> dict | None:
         """Build template variables for a model."""
+        if model_id in self.EDIT_MODEL_IDS:
+            print(f"  Skipped: {model_id} uses /edit/completions; not supported yet")
+            return None
+
         service_type = self._determine_service_type(model_id)
         display_name = model_id.replace("-", " ").replace("_", " ").title()
 
